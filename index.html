@@ -36,13 +36,7 @@
     overflow: hidden;
   }
   .hero .deco { font-size: 20px; letter-spacing: 6px; margin-bottom: 6px; }
-  .hero h1 {
-    font-size: 24px;
-    font-weight: 700;
-    color: #d6336c;
-    letter-spacing: 2px;
-    margin-bottom: 4px;
-  }
+  .hero h1 { font-size: 24px; font-weight: 700; color: #d6336c; letter-spacing: 2px; margin-bottom: 4px; }
   .hero .sub { font-size: 12px; color: #b0879b; letter-spacing: 1px; }
   .hero .paw { position: absolute; font-size: 15px; opacity: 0.5; }
   .paw.p1 { top: 10px; left: 14px; transform: rotate(-18deg); }
@@ -50,149 +44,141 @@
   .paw.p3 { bottom: 10px; left: 24px; transform: rotate(10deg); }
   .paw.p4 { bottom: 12px; right: 22px; transform: rotate(-12deg); }
 
+  h2 { font-size: 17px; font-weight: 600; margin: 24px 0 10px; }
+
   /* 系统 Tab 切换 */
-  .tabs {
-    display: flex;
-    background: #ffe8f0;
-    border-radius: 12px;
-    padding: 3px;
-    margin-bottom: 16px;
-  }
+  .tabs { display: flex; background: #ffe8f0; border-radius: 12px; padding: 3px; margin-bottom: 16px; }
   .tab-btn {
-    flex: 1;
-    padding: 10px 0;
-    border: none;
-    border-radius: 9px;
-    font-size: 15px;
-    font-weight: 500;
-    background: transparent;
-    color: #b0879b;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    font-family: inherit;
+    flex: 1; padding: 10px 0; border: none; border-radius: 9px; font-size: 15px; font-weight: 500;
+    background: transparent; color: #b0879b; cursor: pointer; transition: all 0.2s ease; font-family: inherit;
   }
-  .tab-btn.active {
-    background: #fff;
-    color: #d6336c;
-    box-shadow: 0 2px 8px rgba(214, 51, 108, 0.12);
-  }
+  .tab-btn.active { background: #fff; color: #d6336c; box-shadow: 0 2px 8px rgba(214, 51, 108, 0.12); }
 
   .system { display: none; }
   .system.show { display: block; }
 
   .card {
-    background: #fff;
-    border-radius: 16px;
-    padding: 20px;
-    box-shadow: 0 4px 16px rgba(214, 51, 108, 0.06);
-    margin-bottom: 16px;
+    background: #fff; border-radius: 16px; padding: 20px;
+    box-shadow: 0 4px 16px rgba(214, 51, 108, 0.06); margin-bottom: 16px;
   }
 
-  /* 时间输入 */
-  .time-row { display: flex; gap: 12px; }
-  .time-field { flex: 1; }
-  .time-field label { display: block; font-size: 13px; color: #86868b; margin-bottom: 6px; }
-  .time-field input {
-    width: 100%;
-    padding: 12px;
-    font-size: 17px;               /* ≥16px：iOS 聚焦不放大 */
-    border: 1px solid #f0d4e0;
-    border-radius: 10px;
-    background: #fff;
-    color: #1d1d1f;
-    font-variant-numeric: tabular-nums;
-    outline: none;
-    transition: border-color 0.2s;
-    appearance: none;
-    -webkit-appearance: none;
-    font-family: inherit;
+  /* 输入 */
+  .field { margin-bottom: 14px; }
+  .field:last-child { margin-bottom: 0; }
+  .field label { display: block; font-size: 13px; color: #86868b; margin-bottom: 6px; }
+  .field input {
+    width: 100%; padding: 12px; font-size: 17px; border: 1px solid #f0d4e0; border-radius: 10px;
+    background: #fff; color: #1d1d1f; font-variant-numeric: tabular-nums; outline: none;
+    transition: border-color 0.2s; appearance: none; -webkit-appearance: none; font-family: inherit;
   }
-  .time-field input:focus { border-color: #f783ac; box-shadow: 0 0 0 3px rgba(247, 131, 172, 0.18); }
+  .field input:focus { border-color: #f783ac; box-shadow: 0 0 0 3px rgba(247, 131, 172, 0.18); }
+  .time-row { display: flex; gap: 12px; }
+  .time-row .field { flex: 1; margin-bottom: 0; }
 
   /* 工作时长标签 */
   .duration-tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: #fff5f8;
-    border-radius: 8px;
-    padding: 8px 12px;
-    font-size: 14px;
-    color: #1d1d1f;
-    margin-top: 16px;
-    font-variant-numeric: tabular-nums;
+    display: inline-flex; align-items: center; gap: 6px; background: #fff5f8; border-radius: 8px;
+    padding: 8px 12px; font-size: 14px; color: #1d1d1f; margin-top: 16px; font-variant-numeric: tabular-nums;
   }
   .dot { width: 8px; height: 8px; border-radius: 50%; background: #34c759; flex-shrink: 0; }
 
-  /* 折算明细 */
-  .detail {
-    font-size: 12px;
-    color: #b0879b;
-    line-height: 1.6;
-    margin-top: 10px;
-    font-variant-numeric: tabular-nums;
-  }
-  .warn {
-    font-size: 12px;
-    color: #a08e96;
-    margin-top: 10px;
-    display: none;
-  }
+  .detail { font-size: 12px; color: #b0879b; line-height: 1.6; margin-top: 10px; font-variant-numeric: tabular-nums; }
+  .warn { font-size: 12px; color: #a08e96; margin-top: 10px; display: none; }
   .warn.show { display: block; }
 
   /* 结果 */
   .result-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 0;
-    font-size: 15px;
-    font-variant-numeric: tabular-nums;
+    display: flex; justify-content: space-between; align-items: center; padding: 10px 0;
+    font-size: 15px; font-variant-numeric: tabular-nums;
   }
   .result-row .val { font-weight: 500; }
   .result-row.deduction .val { color: #ff3b30; }
-  .result-row.final {
-    border-top: 1px solid #ffe8f0;
-    margin-top: 6px;
-    padding-top: 16px;
-  }
+  .result-row.final { border-top: 1px solid #ffe8f0; margin-top: 6px; padding-top: 16px; }
   .result-row.final .label { font-weight: 600; }
   .result-row.final .val { font-size: 26px; font-weight: 700; color: #34c759; }
 
-  /* 复制按钮 */
-  .copy-btn {
-    width: 100%;
-    padding: 13px 0;
-    border: none;
-    border-radius: 12px;
-    font-size: 16px;
-    font-weight: 600;
-    background: #f783ac;
-    color: #fff;
-    cursor: pointer;
-    transition: background 0.2s, transform 0.1s;
-    margin-bottom: 16px;
-    font-family: inherit;
+  /* 保存按钮 */
+  .save-btn {
+    width: 100%; padding: 13px 0; border: none; border-radius: 12px; font-size: 16px; font-weight: 600;
+    background: #f783ac; color: #fff; cursor: pointer; transition: background 0.2s, transform 0.1s;
+    margin-bottom: 16px; font-family: inherit;
   }
-  .copy-btn:active { background: #e64980; transform: scale(0.98); }
-  .copy-btn.done { background: #34c759; }
+  .save-btn:active { background: #e64980; transform: scale(0.98); }
+  .save-btn.saved { background: #34c759; }
 
   /* 底部规则提示 */
-  .rule-hint {
-    text-align: center;
-    font-size: 12px;
-    color: #b0879b;
-    line-height: 1.6;
-    padding: 0 8px;
-  }
+  .rule-hint { text-align: center; font-size: 12px; color: #b0879b; line-height: 1.6; padding: 0 8px; }
 
-  .footer-deco {
-    text-align: center;
-    font-size: 16px;
-    letter-spacing: 8px;
-    margin-top: 20px;
-    opacity: 0.7;
+  /* 本月汇总 */
+  .month-card {
+    background: linear-gradient(135deg, #ffe0ec 0%, #fff0f5 55%, #e8f4ff 100%);
+    border-radius: 16px; padding: 16px 20px;
+    box-shadow: 0 4px 16px rgba(255, 182, 213, 0.25); margin-bottom: 14px;
   }
+  .month-title {
+    font-size: 15px; font-weight: 700; color: #d6336c; margin-bottom: 10px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .month-title .count { font-size: 12px; font-weight: 500; color: #b0879b; }
+  .month-grid { display: flex; text-align: center; }
+  .month-item { flex: 1; }
+  .month-item + .month-item { border-left: 1px solid rgba(214, 51, 108, 0.12); }
+  .month-num { font-size: 17px; font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1.3; }
+  .month-num.dur { color: #1d1d1f; }
+  .month-num.ded { color: #ff3b30; }
+  .month-num.inc { color: #34c759; }
+  .month-cap { font-size: 11px; color: #b0879b; margin-top: 2px; }
+
+  /* 记录区 */
+  .day-card {
+    background: #fff; border-radius: 16px; padding: 16px 20px;
+    box-shadow: 0 4px 16px rgba(214, 51, 108, 0.06); margin-bottom: 12px;
+  }
+  .day-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-bottom: 10px; border-bottom: 1px solid #fff0f5; margin-bottom: 4px;
+  }
+  .day-date { font-size: 15px; font-weight: 600; }
+  .day-total { font-size: 12px; color: #86868b; text-align: right; line-height: 1.5; font-variant-numeric: tabular-nums; }
+  .day-total b { color: #1d1d1f; }
+  .day-total .inc { color: #34c759; font-weight: 600; }
+
+  .entry {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    padding: 10px 0; border-bottom: 1px solid #fff5f8; font-size: 14px;
+  }
+  .entry:last-child { border-bottom: none; padding-bottom: 2px; }
+  .entry-info { line-height: 1.5; flex: 1; min-width: 0; }
+  .entry-title { font-weight: 500; }
+  .entry-sub { font-size: 12px; color: #86868b; font-variant-numeric: tabular-nums; }
+  .entry-note { font-size: 12px; color: #c07a9b; margin-top: 3px; word-break: break-word; }
+  .entry-nums { text-align: right; line-height: 1.5; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .entry-ded { font-size: 12px; color: #ff3b30; }
+  .entry-net { font-weight: 600; color: #34c759; }
+  .entry-del {
+    border: none; background: none; color: #e9c2d4; font-size: 18px; cursor: pointer;
+    padding: 4px 0 4px 10px; margin-left: 6px; font-family: inherit;
+  }
+  .entry-del:active { color: #ff3b30; }
+  .entry-right { display: flex; align-items: center; }
+
+  .badge {
+    display: inline-block; font-size: 11px; padding: 1px 6px; border-radius: 5px;
+    margin-right: 5px; vertical-align: 1px;
+  }
+  .badge-cat { background: #e8f0fe; color: #0071e3; }
+  .badge-moon { background: #f3e8fd; color: #af52de; }
+
+  .empty-hint { text-align: center; color: #b0879b; font-size: 13px; padding: 20px 0 4px; }
+  .foot-actions { text-align: center; margin-top: 4px; }
+  .clear-btn, .backup-btn {
+    display: inline-block; border: none; background: none; font-size: 13px; cursor: pointer;
+    padding: 8px 10px; font-family: inherit;
+  }
+  .clear-btn { color: #ff3b30; }
+  .backup-btn { color: #b0879b; }
+
+  .footer-deco { text-align: center; font-size: 16px; letter-spacing: 8px; margin-top: 20px; opacity: 0.7; }
 </style>
 </head>
 <body>
@@ -215,12 +201,16 @@
   <!-- ========== 系统一：柴郡猫 ========== -->
   <div class="system show" id="system-cat">
     <div class="card">
+      <div class="field">
+        <label>日期</label>
+        <input type="date" id="cat-date">
+      </div>
       <div class="time-row">
-        <div class="time-field">
+        <div class="field">
           <label>开始时间</label>
           <input type="time" id="cat-start" value="09:00">
         </div>
-        <div class="time-field">
+        <div class="field">
           <label>结束时间</label>
           <input type="time" id="cat-end" value="18:00">
         </div>
@@ -228,6 +218,10 @@
       <div class="duration-tag"><span class="dot"></span><span id="cat-duration">工作时长：9 小时 0 分钟</span></div>
       <div class="detail" id="cat-detail"></div>
       <div class="warn" id="cat-warn">开始与结束时间相同，所以是 0 小时哦</div>
+      <div class="field" style="margin-top:14px">
+        <label>备注（可选）</label>
+        <input type="text" id="cat-note" placeholder="比如：加了半小时班" maxlength="60">
+      </div>
     </div>
 
     <div class="card">
@@ -245,19 +239,23 @@
       </div>
     </div>
 
-    <button class="copy-btn" id="cat-copy" onclick="copyResult('cat')">复制结果 🐾</button>
+    <button class="save-btn" id="cat-save" onclick="saveRecord('cat')">保存今天的记录 🐾</button>
     <div class="rule-hint">柴郡猫：时薪 40 元，超时 0–9 分钟不计，10 分钟起按 0.25 / 0.5 / 0.75 / 1 小时折算，抽成 10%</div>
   </div>
 
   <!-- ========== 系统二：明月心 ========== -->
   <div class="system" id="system-moon">
     <div class="card">
+      <div class="field">
+        <label>日期</label>
+        <input type="date" id="moon-date">
+      </div>
       <div class="time-row">
-        <div class="time-field">
+        <div class="field">
           <label>开始时间</label>
           <input type="time" id="moon-start" value="09:00">
         </div>
-        <div class="time-field">
+        <div class="field">
           <label>结束时间</label>
           <input type="time" id="moon-end" value="18:00">
         </div>
@@ -265,6 +263,10 @@
       <div class="duration-tag"><span class="dot"></span><span id="moon-duration">工作时长：9 小时 0 分钟</span></div>
       <div class="detail" id="moon-detail"></div>
       <div class="warn" id="moon-warn">开始与结束时间相同，所以是 0 小时哦</div>
+      <div class="field" style="margin-top:14px">
+        <label>备注（可选）</label>
+        <input type="text" id="moon-note" placeholder="比如：加了半小时班" maxlength="60">
+      </div>
     </div>
 
     <div class="card">
@@ -282,8 +284,36 @@
       </div>
     </div>
 
-    <button class="copy-btn" id="moon-copy" onclick="copyResult('moon')">复制结果 🐾</button>
+    <button class="save-btn" id="moon-save" onclick="saveRecord('moon')">保存今天的记录 🐾</button>
     <div class="rule-hint">明月心：时薪 35 元，超时 0–9 分钟不计，10 分钟起按档位补贴；抽成 = 整小时×3 元 + 超时档（每 10 分钟 0.5 元）</div>
+  </div>
+
+  <!-- ========== 本月汇总 ========== -->
+  <div class="month-card" id="month-card" style="display:none">
+    <div class="month-title">📅 <span id="month-label">本月汇总</span><span class="count" id="month-count"></span></div>
+    <div class="month-grid">
+      <div class="month-item">
+        <div class="month-num dur" id="month-dur">0 小时</div>
+        <div class="month-cap">总工作时长</div>
+      </div>
+      <div class="month-item">
+        <div class="month-num ded" id="month-ded">¥0.00</div>
+        <div class="month-cap">总抽成</div>
+      </div>
+      <div class="month-item">
+        <div class="month-num inc" id="month-inc">¥0.00</div>
+        <div class="month-cap">总收入</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== 记录区 ========== -->
+  <h2>📝 我的记录</h2>
+  <div id="records"></div>
+  <div class="empty-hint" id="empty-hint">还没有记录哦，算完点「保存今天的记录」就可以记账啦 ♡</div>
+  <div class="foot-actions" id="foot-actions" style="display:none">
+    <button class="backup-btn" id="backup-btn" onclick="backupRecords()">备份到剪贴板</button>
+    <button class="clear-btn" id="clear-btn" onclick="clearAll()">清空全部记录</button>
   </div>
 
   <div class="footer-deco">🐹 🌸 ⭐ 🌸 🐰</div>
@@ -375,13 +405,24 @@
 </script>
 
 <!-- ============================================================
-     界面层（DOM 绑定 + 渲染 + 复制）
+     界面层（DOM 绑定 + 渲染 + 记录存储）
+     记录只存在本机浏览器里，不上传任何地方
      ============================================================ -->
 <script>
   var TAB = 'cat';
+  var LS_KEY = 'wage_records_v2';
 
   function el(id) { return document.getElementById(id); }
+  function pad2(n) { return String(n).padStart(2, '0'); }
+  function todayStr() {
+    var d = new Date();
+    return d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate());
+  }
+  function fmtDur(totalMin) {
+    return Math.floor(totalMin / 60) + ' 小时 ' + (totalMin % 60) + ' 分钟';
+  }
 
+  /* ---------- 计算并渲染当前面板 ---------- */
   function calcCatUI() {
     var d = parseDuration(el('cat-start').value, el('cat-end').value);
     if (!d) return null;
@@ -424,46 +465,202 @@
     el('system-moon').classList.toggle('show', tab === 'moon');
   }
 
-  function copyResult(sys) {
-    var isCat = sys === 'cat';
-    var r = isCat ? calcCatUI() : calcMoonUI();
-    if (!r) return;
-    var start = el(sys + '-start').value, end = el(sys + '-end').value;
-    var d = parseDuration(start, end);
-    var text = (isCat ? '柴郡猫' : '明月心') + ' ' + start + '–' + end +
-      '（' + formatDuration(d.totalMin) + '）\n' +
-      '工资金额 ' + formatYuan(r.gross) + '\n' +
-      '抽成 ' + formatYuan(r.ded) + '\n' +
-      '实发工资 ' + formatYuan(r.net);
+  /* ---------- 记录存取 ---------- */
+  function loadRecords() {
+    try { return JSON.parse(localStorage.getItem(LS_KEY)) || []; }
+    catch (e) { return []; }
+  }
+  function storeRecords(list) {
+    try { localStorage.setItem(LS_KEY, JSON.stringify(list)); return true; }
+    catch (e) { alert('保存失败：这台设备的浏览器不让存数据（可能开了无痕模式或空间已满）。'); return false; }
+  }
 
-    var btn = el(sys + '-copy');
-    function ok() { btn.textContent = '已复制 ✓'; btn.classList.add('done');
-      setTimeout(function(){ btn.textContent = '复制结果 🐾'; btn.classList.remove('done'); }, 1200); }
+  function saveRecord(rule) {
+    var isCat = rule === 'cat';
+    var d = parseDuration(el(rule + '-start').value, el(rule + '-end').value);
+    if (!d) return;
+    var r = isCat ? catCalc(d) : moonCalc(d);
+    var date = el(rule + '-date').value || todayStr();
+    var note = (el(rule + '-note').value || '').trim();
+
+    var list = loadRecords();
+    list.push({
+      id: Date.now(),
+      date: date,
+      rule: rule,
+      start: el(rule + '-start').value,
+      end: el(rule + '-end').value,
+      totalMin: d.totalMin,
+      hours: d.hours,
+      om: d.om,
+      gross: r.gross,
+      ded: r.ded,
+      net: r.net,
+      note: note
+    });
+    if (!storeRecords(list)) return;
+
+    el(rule + '-note').value = '';
+    renderRecords();
+
+    var btn = el(rule + '-save');
+    btn.textContent = '已保存 ✓';
+    btn.classList.add('saved');
+    setTimeout(function () {
+      btn.textContent = '保存今天的记录 🐾';
+      btn.classList.remove('saved');
+    }, 1200);
+  }
+
+  function deleteRecord(id) {
+    storeRecords(loadRecords().filter(function (r) { return r.id !== id; }));
+    renderRecords();
+  }
+
+  function clearAll() {
+    if (!confirm('确定清空全部记录吗？此操作不可恢复。')) return;
+    storeRecords([]);
+    renderRecords();
+  }
+
+  /* ---------- 备份到剪贴板 ---------- */
+  function backupRecords() {
+    var list = loadRecords();
+    if (!list.length) { alert('还没有记录可以备份。'); return; }
+    var lines = ['【小唯专属版 · 工资记录备份】导出时间 ' + new Date().toLocaleString()];
+    var sorted = list.slice().sort(function (a, b) { return a.id - b.id; });
+    var curDate = '';
+    sorted.forEach(function (r) {
+      if (r.date !== curDate) { curDate = r.date; lines.push('\n' + r.date); }
+      lines.push('  ' + (r.rule === 'cat' ? '柴郡猫' : '明月心') + ' ' + r.start + '–' + r.end +
+        '｜' + fmtDur(r.totalMin) +
+        '｜工资 ' + formatYuan(r.gross) +
+        '｜抽成 ' + formatYuan(r.ded) +
+        '｜实发 ' + formatYuan(r.net) +
+        (r.note ? '｜备注：' + r.note : ''));
+    });
+    copyText(lines.join('\n'), function () {
+      var b = el('backup-btn');
+      b.textContent = '已复制到剪贴板 ✓';
+      setTimeout(function () { b.textContent = '备份到剪贴板'; }, 1600);
+    });
+  }
+
+  function copyText(text, onOk) {
     function fallback() {
       var ta = document.createElement('textarea');
-      ta.value = text; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.top = '-1000px';
+      ta.value = text; ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed'; ta.style.top = '-1000px';
       document.body.appendChild(ta); ta.select();
       var done = false;
       try { done = document.execCommand('copy'); } catch (e) { done = false; }
       document.body.removeChild(ta);
-      if (done) { ok(); } else { window.prompt('手动复制这段文字：', text); }
+      if (done) { onOk(); } else { window.prompt('手动复制这段文字：', text); }
     }
     if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(text).then(ok, fallback);
+      navigator.clipboard.writeText(text).then(onOk, fallback);
     } else { fallback(); }
   }
 
-  ['cat-start','cat-end'].forEach(function(id){
+  /* ---------- 渲染：本月汇总 ---------- */
+  function renderMonth() {
+    var now = new Date();
+    var prefix = now.getFullYear() + '-' + pad2(now.getMonth() + 1);
+    var list = loadRecords().filter(function (r) { return String(r.date).indexOf(prefix) === 0; });
+    var card = el('month-card');
+    if (!list.length) { card.style.display = 'none'; return; }
+
+    var totMin = 0, totDed = 0, totNet = 0;
+    list.forEach(function (r) { totMin += r.totalMin; totDed += r.ded; totNet += r.net; });
+
+    el('month-label').textContent = (now.getMonth() + 1) + ' 月汇总';
+    el('month-count').textContent = '共 ' + list.length + ' 条';
+    el('month-dur').textContent = fmtDur(totMin);
+    el('month-ded').textContent = formatYuan(totDed);
+    el('month-inc').textContent = formatYuan(totNet);
+    card.style.display = 'block';
+  }
+
+  /* ---------- 渲染：按天分组的记录 ---------- */
+  function renderRecords() {
+    renderMonth();
+    var list = loadRecords();
+    var box = el('records');
+    el('empty-hint').style.display = list.length ? 'none' : 'block';
+    el('foot-actions').style.display = list.length ? 'block' : 'none';
+    box.innerHTML = '';
+    if (!list.length) return;
+
+    var groups = {}, dates = [];
+    list.forEach(function (r) {
+      var key = r.date || '';
+      if (!groups[key]) { groups[key] = []; dates.push(key); }
+      groups[key].push(r);
+    });
+    dates.sort().reverse();
+
+    dates.forEach(function (date) {
+      var entries = groups[date].slice().sort(function (a, b) { return a.id - b.id; });
+      var totMin = 0, totDed = 0, totNet = 0;
+      entries.forEach(function (r) { totMin += r.totalMin; totDed += r.ded; totNet += r.net; });
+
+      var card = document.createElement('div');
+      card.className = 'day-card';
+
+      var header = '<div class="day-header">' +
+        '<span class="day-date">' + date + '</span>' +
+        '<span class="day-total">共 <b>' + fmtDur(totMin) + '</b><br>' +
+        '抽成 ' + formatYuan(totDed) + ' · <span class="inc">收入 ' + formatYuan(totNet) + '</span></span>' +
+        '</div>';
+
+      var rows = entries.map(function (r) {
+        var isCat = r.rule === 'cat';
+        var badge = isCat
+          ? '<span class="badge badge-cat">柴郡猫</span>'
+          : '<span class="badge badge-moon">明月心</span>';
+        return '<div class="entry">' +
+          '<div class="entry-info">' +
+            '<div class="entry-title">' + badge + r.start + ' – ' + r.end + '</div>' +
+            '<div class="entry-sub">时长 ' + fmtDur(r.totalMin) + '</div>' +
+            (r.note ? '<div class="entry-note">📝 ' + escapeHtml(r.note) + '</div>' : '') +
+          '</div>' +
+          '<div class="entry-right">' +
+            '<div class="entry-nums">' +
+              '<div class="entry-ded">抽成 ' + formatYuan(r.ded) + '</div>' +
+              '<div class="entry-net">收入 ' + formatYuan(r.net) + '</div>' +
+            '</div>' +
+            '<button class="entry-del" onclick="deleteRecord(' + r.id + ')" title="删除">×</button>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+
+      card.innerHTML = header + rows;
+      box.appendChild(card);
+    });
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  /* ---------- 初始化 ---------- */
+  el('cat-date').value = todayStr();
+  el('moon-date').value = todayStr();
+
+  ['cat-start', 'cat-end'].forEach(function (id) {
     el(id).addEventListener('change', calcCatUI);
     el(id).addEventListener('input', calcCatUI);
   });
-  ['moon-start','moon-end'].forEach(function(id){
+  ['moon-start', 'moon-end'].forEach(function (id) {
     el(id).addEventListener('change', calcMoonUI);
     el(id).addEventListener('input', calcMoonUI);
   });
 
   calcCatUI();
   calcMoonUI();
+  renderRecords();
 </script>
 </body>
 </html>
