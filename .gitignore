@@ -1,0 +1,4 @@
+# 绝不提交任何凭据
+.token
+*.token
+.env

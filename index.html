@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="小唯专属版">
+<meta name="theme-color" content="#fff0f5">
+<title>小唯专属版 · 工资计算器</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: #fff5f8;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 24px 16px;
+    padding-bottom: calc(24px + env(safe-area-inset-bottom));
+    color: #1d1d1f;
+  }
+  .app { width: 100%; max-width: 400px; }
+
+  /* 可爱标题区 */
+  .hero {
+    background: linear-gradient(135deg, #ffe0ec 0%, #fff0f5 55%, #e8f4ff 100%);
+    border-radius: 20px;
+    padding: 22px 16px 18px;
+    text-align: center;
+    margin-bottom: 18px;
+    box-shadow: 0 4px 16px rgba(255, 182, 213, 0.25);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero .deco { font-size: 20px; letter-spacing: 6px; margin-bottom: 6px; }
+  .hero h1 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #d6336c;
+    letter-spacing: 2px;
+    margin-bottom: 4px;
+  }
+  .hero .sub { font-size: 12px; color: #b0879b; letter-spacing: 1px; }
+  .hero .paw { position: absolute; font-size: 15px; opacity: 0.5; }
+  .paw.p1 { top: 10px; left: 14px; transform: rotate(-18deg); }
+  .paw.p2 { top: 12px; right: 16px; transform: rotate(14deg); }
+  .paw.p3 { bottom: 10px; left: 24px; transform: rotate(10deg); }
+  .paw.p4 { bottom: 12px; right: 22px; transform: rotate(-12deg); }
+
+  /* 系统 Tab 切换 */
+  .tabs {
+    display: flex;
+    background: #ffe8f0;
+    border-radius: 12px;
+    padding: 3px;
+    margin-bottom: 16px;
+  }
+  .tab-btn {
+    flex: 1;
+    padding: 10px 0;
+    border: none;
+    border-radius: 9px;
+    font-size: 15px;
+    font-weight: 500;
+    background: transparent;
+    color: #b0879b;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+  }
+  .tab-btn.active {
+    background: #fff;
+    color: #d6336c;
+    box-shadow: 0 2px 8px rgba(214, 51, 108, 0.12);
+  }
+
+  .system { display: none; }
+  .system.show { display: block; }
+
+  .card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 4px 16px rgba(214, 51, 108, 0.06);
+    margin-bottom: 16px;
+  }
+
+  /* 时间输入 */
+  .time-row { display: flex; gap: 12px; }
+  .time-field { flex: 1; }
+  .time-field label { display: block; font-size: 13px; color: #86868b; margin-bottom: 6px; }
+  .time-field input {
+    width: 100%;
+    padding: 12px;
+    font-size: 17px;               /* ≥16px：iOS 聚焦不放大 */
+    border: 1px solid #f0d4e0;
+    border-radius: 10px;
+    background: #fff;
+    color: #1d1d1f;
+    font-variant-numeric: tabular-nums;
+    outline: none;
+    transition: border-color 0.2s;
+    appearance: none;
+    -webkit-appearance: none;
+    font-family: inherit;
+  }
+  .time-field input:focus { border-color: #f783ac; box-shadow: 0 0 0 3px rgba(247, 131, 172, 0.18); }
+
+  /* 工作时长标签 */
+  .duration-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #fff5f8;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 14px;
+    color: #1d1d1f;
+    margin-top: 16px;
+    font-variant-numeric: tabular-nums;
+  }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: #34c759; flex-shrink: 0; }
+
+  /* 折算明细 */
+  .detail {
+    font-size: 12px;
+    color: #b0879b;
+    line-height: 1.6;
+    margin-top: 10px;
+    font-variant-numeric: tabular-nums;
+  }
+  .warn {
+    font-size: 12px;
+    color: #a08e96;
+    margin-top: 10px;
+    display: none;
+  }
+  .warn.show { display: block; }
+
+  /* 结果 */
+  .result-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    font-size: 15px;
+    font-variant-numeric: tabular-nums;
+  }
+  .result-row .val { font-weight: 500; }
+  .result-row.deduction .val { color: #ff3b30; }
+  .result-row.final {
+    border-top: 1px solid #ffe8f0;
+    margin-top: 6px;
+    padding-top: 16px;
+  }
+  .result-row.final .label { font-weight: 600; }
+  .result-row.final .val { font-size: 26px; font-weight: 700; color: #34c759; }
+
+  /* 复制按钮 */
+  .copy-btn {
+    width: 100%;
+    padding: 13px 0;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    background: #f783ac;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    margin-bottom: 16px;
+    font-family: inherit;
+  }
+  .copy-btn:active { background: #e64980; transform: scale(0.98); }
+  .copy-btn.done { background: #34c759; }
+
+  /* 底部规则提示 */
+  .rule-hint {
+    text-align: center;
+    font-size: 12px;
+    color: #b0879b;
+    line-height: 1.6;
+    padding: 0 8px;
+  }
+
+  .footer-deco {
+    text-align: center;
+    font-size: 16px;
+    letter-spacing: 8px;
+    margin-top: 20px;
+    opacity: 0.7;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="hero">
+    <span class="paw p1">🐾</span>
+    <span class="paw p2">🌸</span>
+    <span class="paw p3">⭐</span>
+    <span class="paw p4">🐾</span>
+    <div class="deco">🐹 🐱 🐰</div>
+    <h1>小唯专属版</h1>
+    <div class="sub">工 资 计 算 器 ♡ 仅 供 本 人 使 用</div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" id="tab-cat" onclick="switchTab('cat')">柴郡猫</button>
+    <button class="tab-btn" id="tab-moon" onclick="switchTab('moon')">明月心</button>
+  </div>
+
+  <!-- ========== 系统一：柴郡猫 ========== -->
+  <div class="system show" id="system-cat">
+    <div class="card">
+      <div class="time-row">
+        <div class="time-field">
+          <label>开始时间</label>
+          <input type="time" id="cat-start" value="09:00">
+        </div>
+        <div class="time-field">
+          <label>结束时间</label>
+          <input type="time" id="cat-end" value="18:00">
+        </div>
+      </div>
+      <div class="duration-tag"><span class="dot"></span><span id="cat-duration">工作时长：9 小时 0 分钟</span></div>
+      <div class="detail" id="cat-detail"></div>
+      <div class="warn" id="cat-warn">开始与结束时间相同，所以是 0 小时哦</div>
+    </div>
+
+    <div class="card">
+      <div class="result-row">
+        <span>工资金额</span>
+        <span class="val" id="cat-gross">¥360.00</span>
+      </div>
+      <div class="result-row deduction">
+        <span>抽成（10%）</span>
+        <span class="val" id="cat-deduction">-¥36.00</span>
+      </div>
+      <div class="result-row final">
+        <span class="label">实发工资</span>
+        <span class="val" id="cat-net">¥324.00</span>
+      </div>
+    </div>
+
+    <button class="copy-btn" id="cat-copy" onclick="copyResult('cat')">复制结果 🐾</button>
+    <div class="rule-hint">柴郡猫：时薪 40 元，超时 0–9 分钟不计，10 分钟起按 0.25 / 0.5 / 0.75 / 1 小时折算，抽成 10%</div>
+  </div>
+
+  <!-- ========== 系统二：明月心 ========== -->
+  <div class="system" id="system-moon">
+    <div class="card">
+      <div class="time-row">
+        <div class="time-field">
+          <label>开始时间</label>
+          <input type="time" id="moon-start" value="09:00">
+        </div>
+        <div class="time-field">
+          <label>结束时间</label>
+          <input type="time" id="moon-end" value="18:00">
+        </div>
+      </div>
+      <div class="duration-tag"><span class="dot"></span><span id="moon-duration">工作时长：9 小时 0 分钟</span></div>
+      <div class="detail" id="moon-detail"></div>
+      <div class="warn" id="moon-warn">开始与结束时间相同，所以是 0 小时哦</div>
+    </div>
+
+    <div class="card">
+      <div class="result-row">
+        <span>工资金额</span>
+        <span class="val" id="moon-gross">¥315.00</span>
+      </div>
+      <div class="result-row deduction">
+        <span>抽成</span>
+        <span class="val" id="moon-deduction">-¥27.00</span>
+      </div>
+      <div class="result-row final">
+        <span class="label">实发工资</span>
+        <span class="val" id="moon-net">¥288.00</span>
+      </div>
+    </div>
+
+    <button class="copy-btn" id="moon-copy" onclick="copyResult('moon')">复制结果 🐾</button>
+    <div class="rule-hint">明月心：时薪 35 元，超时 0–9 分钟不计，10 分钟起按档位补贴；抽成 = 整小时×3 元 + 超时档（每 10 分钟 0.5 元）</div>
+  </div>
+
+  <div class="footer-deco">🐹 🌸 ⭐ 🌸 🐰</div>
+</div>
+
+<!-- ============================================================
+     内核（纯函数、不碰 DOM）—— 自动验收脚本会单独抽出这一段来跑
+     金额一律用「分」做整数运算，避免浮点误差
+     ============================================================ -->
+<script id="wage-kernel">
+  var CAT_RATE = 40;        // 柴郡猫时薪（R5：固定 40）
+  var MOON_RATE = 35;       // 明月心基础时薪
+  var MOON_BASE_DED = 3;    // 明月心基础抽成：每整小时 3 元
+
+  /* 时间 → 时长（R1：只看总时长，与几点上下班无关） */
+  function parseDuration(startVal, endVal) {
+    if (!startVal || !endVal) return null;
+    var sp = String(startVal).split(':');
+    var ep = String(endVal).split(':');
+    if (sp.length < 2 || ep.length < 2) return null;
+    var sm = parseInt(sp[0], 10) * 60 + parseInt(sp[1], 10);
+    var em = parseInt(ep[0], 10) * 60 + parseInt(ep[1], 10);
+    if (isNaN(sm) || isNaN(em)) return null;
+    var totalMin = em - sm;
+    var crossedDay = false;
+    if (totalMin < 0) { totalMin += 1440; crossedDay = true; }   // 跨天
+    return {
+      totalMin: totalMin,
+      hours: Math.floor(totalMin / 60),   // 整小时数
+      om: totalMin % 60,                  // 超时分钟（0–59，永远取不到 60）
+      crossedDay: crossedDay,
+      sameTime: totalMin === 0
+    };
+  }
+
+  /* 柴郡猫超时折算：返回「几个 0.25 小时」（0–9 免费，10 分钟起算） */
+  function catOvertimeQuarters(om) {
+    if (om <= 9) return 0;
+    if (om <= 19) return 1;   // 0.25 小时
+    if (om <= 39) return 2;   // 0.5 小时
+    if (om <= 50) return 3;   // 0.75 小时
+    return 4;                 // 1 小时
+  }
+
+  /* 柴郡猫计算 → 全部为「分」 */
+  function catCalc(d) {
+    var q = catOvertimeQuarters(d.om);
+    var grossCents = d.hours * CAT_RATE * 100 + q * CAT_RATE * 25;  // 0.25 小时 = 时薪/4
+    var dedCents = Math.round(grossCents * 0.10);
+    return {
+      hours: d.hours, om: d.om, quarters: q, overtimeHours: q * 0.25,
+      gross: grossCents, ded: dedCents, net: grossCents - dedCents,
+      crossedDay: d.crossedDay, sameTime: d.sameTime
+    };
+  }
+
+  /* 明月心超时工资档（返回「分」；0–9 免费，10 分钟起算） */
+  function moonOvertimePay(om) {
+    if (om < 10) return 0;
+    if (om <= 14) return 600;    // 6 元
+    if (om <= 24) return 1200;   // 12 元
+    if (om <= 34) return 1700;   // 17 元
+    if (om <= 44) return 2400;   // 24 元
+    if (om <= 54) return 3000;   // 30 元
+    return 3500;                 // 35 元
+  }
+
+  /* 明月心计算 → 全部为「分」 */
+  function moonCalc(d) {
+    var otPay = moonOvertimePay(d.om);
+    var grossCents = d.hours * MOON_RATE * 100 + otPay;
+    var baseDed = d.hours * MOON_BASE_DED * 100;
+    var otDed = d.om < 10 ? 0 : Math.round(d.om / 10) * 50;   // 每 10 分钟 0.5 元
+    var dedCents = baseDed + otDed;
+    return {
+      hours: d.hours, om: d.om, otPay: otPay, baseDed: baseDed, otDed: otDed,
+      gross: grossCents, ded: dedCents, net: grossCents - dedCents,
+      crossedDay: d.crossedDay, sameTime: d.sameTime
+    };
+  }
+
+  /* 分 → 显示文本（R6：保留两位小数） */
+  function formatYuan(cents) {
+    return '¥' + (cents / 100).toFixed(2);
+  }
+  function formatDuration(totalMin) {
+    return Math.floor(totalMin / 60) + ' 小时 ' + (totalMin % 60) + ' 分钟';
+  }
+</script>
+
+<!-- ============================================================
+     界面层（DOM 绑定 + 渲染 + 复制）
+     ============================================================ -->
+<script>
+  var TAB = 'cat';
+
+  function el(id) { return document.getElementById(id); }
+
+  function calcCatUI() {
+    var d = parseDuration(el('cat-start').value, el('cat-end').value);
+    if (!d) return null;
+    var r = catCalc(d);
+    el('cat-duration').textContent = '工作时长：' + formatDuration(d.totalMin);
+    el('cat-detail').textContent = r.hours + ' 整小时 × 40 元' +
+      (r.quarters > 0
+        ? '，超时 ' + r.om + ' 分钟 → 按 ' + r.overtimeHours + ' 小时计（+' + formatYuan(r.quarters * CAT_RATE * 25) + '）'
+        : '，超时 ' + r.om + ' 分钟 → 不计入（0–9 分钟免费）');
+    el('cat-warn').classList.toggle('show', d.sameTime);
+    el('cat-gross').textContent = formatYuan(r.gross);
+    el('cat-deduction').textContent = '-' + formatYuan(r.ded);
+    el('cat-net').textContent = formatYuan(r.net);
+    return r;
+  }
+
+  function calcMoonUI() {
+    var d = parseDuration(el('moon-start').value, el('moon-end').value);
+    if (!d) return null;
+    var r = moonCalc(d);
+    el('moon-duration').textContent = '工作时长：' + formatDuration(d.totalMin);
+    el('moon-detail').textContent = r.hours + ' 整小时 × 35 元' +
+      (r.otPay > 0
+        ? '，超时 ' + r.om + ' 分钟 → 档位 ' + formatYuan(r.otPay)
+        : '，超时 ' + r.om + ' 分钟 → 不计入（0–9 分钟免费）') +
+      '；抽成 ' + r.hours + '×3 元' +
+      (r.otDed > 0 ? ' + 超时档 ' + formatYuan(r.otDed) : '');
+    el('moon-warn').classList.toggle('show', d.sameTime);
+    el('moon-gross').textContent = formatYuan(r.gross);
+    el('moon-deduction').textContent = '-' + formatYuan(r.ded);
+    el('moon-net').textContent = formatYuan(r.net);
+    return r;
+  }
+
+  function switchTab(tab) {
+    TAB = tab;
+    el('tab-cat').classList.toggle('active', tab === 'cat');
+    el('tab-moon').classList.toggle('active', tab === 'moon');
+    el('system-cat').classList.toggle('show', tab === 'cat');
+    el('system-moon').classList.toggle('show', tab === 'moon');
+  }
+
+  function copyResult(sys) {
+    var isCat = sys === 'cat';
+    var r = isCat ? calcCatUI() : calcMoonUI();
+    if (!r) return;
+    var start = el(sys + '-start').value, end = el(sys + '-end').value;
+    var d = parseDuration(start, end);
+    var text = (isCat ? '柴郡猫' : '明月心') + ' ' + start + '–' + end +
+      '（' + formatDuration(d.totalMin) + '）\n' +
+      '工资金额 ' + formatYuan(r.gross) + '\n' +
+      '抽成 ' + formatYuan(r.ded) + '\n' +
+      '实发工资 ' + formatYuan(r.net);
+
+    var btn = el(sys + '-copy');
+    function ok() { btn.textContent = '已复制 ✓'; btn.classList.add('done');
+      setTimeout(function(){ btn.textContent = '复制结果 🐾'; btn.classList.remove('done'); }, 1200); }
+    function fallback() {
+      var ta = document.createElement('textarea');
+      ta.value = text; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.top = '-1000px';
+      document.body.appendChild(ta); ta.select();
+      var done = false;
+      try { done = document.execCommand('copy'); } catch (e) { done = false; }
+      document.body.removeChild(ta);
+      if (done) { ok(); } else { window.prompt('手动复制这段文字：', text); }
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(ok, fallback);
+    } else { fallback(); }
+  }
+
+  ['cat-start','cat-end'].forEach(function(id){
+    el(id).addEventListener('change', calcCatUI);
+    el(id).addEventListener('input', calcCatUI);
+  });
+  ['moon-start','moon-end'].forEach(function(id){
+    el(id).addEventListener('change', calcMoonUI);
+    el(id).addEventListener('input', calcMoonUI);
+  });
+
+  calcCatUI();
+  calcMoonUI();
+</script>
+</body>
+</html>
