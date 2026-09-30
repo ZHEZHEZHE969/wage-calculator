@@ -194,8 +194,8 @@
   </div>
 
   <div class="tabs">
-    <button class="tab-btn active" id="tab-cat" onclick="switchTab('cat')">柴郡猫</button>
-    <button class="tab-btn" id="tab-moon" onclick="switchTab('moon')">明月心</button>
+    <button class="tab-btn active" id="tab-cat" onclick="switchTab('cat')">40元</button>
+    <button class="tab-btn" id="tab-moon" onclick="switchTab('moon')">35元</button>
   </div>
 
   <!-- ========== 系统一：柴郡猫 ========== -->
@@ -411,9 +411,15 @@
 <script>
   var TAB = 'cat';
   var LS_KEY = 'wage_records_v2';
+  var _seq = 0;
 
   function el(id) { return document.getElementById(id); }
   function pad2(n) { return String(n).padStart(2, '0'); }
+  // 记录 ID 必须唯一：单用 Date.now() 在同一毫秒内会撞号，导致删一条连带删掉同号的几条
+  function newId() {
+    _seq = (_seq + 1) % 1000;
+    return Date.now() * 1000 + _seq;
+  }
   function todayStr() {
     var d = new Date();
     return d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate());
@@ -485,7 +491,7 @@
 
     var list = loadRecords();
     list.push({
-      id: Date.now(),
+      id: newId(),
       date: date,
       rule: rule,
       start: el(rule + '-start').value,
