@@ -198,7 +198,7 @@
     <button class="tab-btn" id="tab-moon" onclick="switchTab('moon')">35元</button>
   </div>
 
-  <!-- ========== 系统一：柴郡猫 ========== -->
+  <!-- ========== 系统一：40元（原「柴郡猫」） ========== -->
   <div class="system show" id="system-cat">
     <div class="card">
       <div class="field">
@@ -240,10 +240,10 @@
     </div>
 
     <button class="save-btn" id="cat-save" onclick="saveRecord('cat')">保存今天的记录 🐾</button>
-    <div class="rule-hint">柴郡猫：时薪 40 元，超时 0–9 分钟不计，10 分钟起按 0.25 / 0.5 / 0.75 / 1 小时折算，抽成 10%</div>
+    <div class="rule-hint">40元：超时 0–9 分钟不计，10 分钟起按 0.25 / 0.5 / 0.75 / 1 小时折算，抽成 10%</div>
   </div>
 
-  <!-- ========== 系统二：明月心 ========== -->
+  <!-- ========== 系统二：35元（原「明月心」） ========== -->
   <div class="system" id="system-moon">
     <div class="card">
       <div class="field">
@@ -285,7 +285,7 @@
     </div>
 
     <button class="save-btn" id="moon-save" onclick="saveRecord('moon')">保存今天的记录 🐾</button>
-    <div class="rule-hint">明月心：时薪 35 元，超时 0–9 分钟不计，10 分钟起按档位补贴；抽成 = 整小时×3 元 + 超时档（每 10 分钟 0.5 元）</div>
+    <div class="rule-hint">35元：超时 0–9 分钟不计，10 分钟起按档位补贴；抽成 = 整小时×3 元 + 超时档（每 10 分钟 0.5 元）</div>
   </div>
 
   <!-- ========== 本月汇总 ========== -->
@@ -543,7 +543,7 @@
     var curDate = '';
     sorted.forEach(function (r) {
       if (r.date !== curDate) { curDate = r.date; lines.push('\n' + r.date); }
-      lines.push('  ' + (r.rule === 'cat' ? '柴郡猫' : '明月心') + ' ' + r.start + '–' + r.end +
+      lines.push('  ' + (r.rule === 'cat' ? '40元' : '35元') + ' ' + r.start + '–' + r.end +
         '｜' + fmtDur(r.totalMin) +
         '｜工资 ' + formatYuan(r.gross) +
         '｜抽成 ' + formatYuan(r.ded) +
@@ -627,8 +627,8 @@
       var rows = entries.map(function (r) {
         var isCat = r.rule === 'cat';
         var badge = isCat
-          ? '<span class="badge badge-cat">柴郡猫</span>'
-          : '<span class="badge badge-moon">明月心</span>';
+          ? '<span class="badge badge-cat">40元</span>'
+          : '<span class="badge badge-moon">35元</span>';
         return '<div class="entry">' +
           '<div class="entry-info">' +
             '<div class="entry-title">' + badge + r.start + ' – ' + r.end + '</div>' +
