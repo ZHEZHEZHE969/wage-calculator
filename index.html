@@ -168,6 +168,7 @@
   }
   .badge-cat { background: #e8f0fe; color: #0071e3; }
   .badge-moon { background: #f3e8fd; color: #af52de; }
+  .badge-self { background: #e6fcf5; color: #0ca678; }
 
   .empty-hint { text-align: center; color: #b0879b; font-size: 13px; padding: 20px 0 4px; }
   .foot-actions { text-align: center; margin-top: 4px; }
@@ -196,6 +197,7 @@
   <div class="tabs">
     <button class="tab-btn active" id="tab-cat" onclick="switchTab('cat')">40元</button>
     <button class="tab-btn" id="tab-moon" onclick="switchTab('moon')">35元</button>
+    <button class="tab-btn" id="tab-self" onclick="switchTab('self')">自填</button>
   </div>
 
   <!-- ========== 系统一：40元（原「柴郡猫」） ========== -->
@@ -286,6 +288,55 @@
 
     <button class="save-btn" id="moon-save" onclick="saveRecord('moon')">保存今天的记录 🐾</button>
     <div class="rule-hint">35元：超时 0–9 分钟不计，10 分钟起按档位补贴；抽成 = 整小时×3 元 + 超时档（每 10 分钟 0.5 元）</div>
+  </div>
+
+  <!-- ========== 系统三：自填时薪（无超时档，抽成 26.4%） ========== -->
+  <div class="system" id="system-self">
+    <div class="card">
+      <div class="field">
+        <label>日期</label>
+        <input type="date" id="self-date">
+      </div>
+      <div class="field">
+        <label>时薪（元 / 小时）</label>
+        <input type="number" id="self-rate" value="45" min="0" step="1" inputmode="decimal" placeholder="填这一单的时薪">
+      </div>
+      <div class="time-row">
+        <div class="field">
+          <label>开始时间</label>
+          <input type="time" id="self-start" value="09:00">
+        </div>
+        <div class="field">
+          <label>结束时间</label>
+          <input type="time" id="self-end" value="18:00">
+        </div>
+      </div>
+      <div class="duration-tag"><span class="dot"></span><span id="self-duration">工作时长：9 小时 0 分钟</span></div>
+      <div class="detail" id="self-detail"></div>
+      <div class="warn" id="self-warn">开始与结束时间相同，所以是 0 小时哦</div>
+      <div class="field" style="margin-top:14px">
+        <label>备注（可选）</label>
+        <input type="text" id="self-note" placeholder="比如：加了半小时班" maxlength="60">
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="result-row">
+        <span>工资金额</span>
+        <span class="val" id="self-gross">¥405.00</span>
+      </div>
+      <div class="result-row deduction">
+        <span>抽成（26.4%）</span>
+        <span class="val" id="self-deduction">-¥106.92</span>
+      </div>
+      <div class="result-row final">
+        <span class="label">实发工资</span>
+        <span class="val" id="self-net">¥298.08</span>
+      </div>
+    </div>
+
+    <button class="save-btn" id="self-save" onclick="saveRecord('self')">保存今天的记录 🐾</button>
+    <div class="rule-hint">自填：时薪自己填，只算整小时，没有超时档；抽成固定 26.4%</div>
   </div>
 
   <!-- ========== 本月汇总 ========== -->
@@ -395,6 +446,22 @@
     };
   }
 
+  /* 自填档：没有超时档，只算整小时；抽成固定 26.4% */
+  var SELF_DED_RATE = 0.264;
+
+  /* 自填计算 → 全部为「分」 */
+  function selfCalc(d, rateYuan) {
+    var rate = Number(rateYuan);
+    if (isNaN(rate) || rate < 0) rate = 0;
+    var grossCents = Math.round(d.hours * rate * 100);
+    var dedCents = Math.round(grossCents * SELF_DED_RATE);
+    return {
+      hours: d.hours, om: d.om, rate: rate,
+      gross: grossCents, ded: dedCents, net: grossCents - dedCents,
+      crossedDay: d.crossedDay, sameTime: d.sameTime
+    };
+  }
+
   /* 分 → 显示文本（R6：保留两位小数） */
   function formatYuan(cents) {
     return '¥' + (cents / 100).toFixed(2);
@@ -433,6 +500,13 @@
     return h + ' 小时' + (m ? ' ' + m + ' 分' : '');
   }
 
+  /* 记录里的规则名（备份文本用） */
+  function ruleLabel(r) {
+    if (r.rule === 'cat') return '40元';
+    if (r.rule === 'moon') return '35元';
+    return (Number(r.rate) || 0) + '元';
+  }
+
   /* ---------- 计算并渲染当前面板 ---------- */
   function calcCatUI() {
     var d = parseDuration(el('cat-start').value, el('cat-end').value);
@@ -468,12 +542,28 @@
     return r;
   }
 
+  function calcSelfUI() {
+    var d = parseDuration(el('self-start').value, el('self-end').value);
+    if (!d) return null;
+    var r = selfCalc(d, el('self-rate').value);
+    el('self-duration').textContent = '工作时长：' + formatDuration(d.totalMin);
+    el('self-detail').textContent = r.hours + ' 整小时 × ' + r.rate + ' 元' +
+      '，超时 ' + r.om + ' 分钟 → 不计入（没有超时档）';
+    el('self-warn').classList.toggle('show', d.sameTime);
+    el('self-gross').textContent = formatYuan(r.gross);
+    el('self-deduction').textContent = '-' + formatYuan(r.ded);
+    el('self-net').textContent = formatYuan(r.net);
+    return r;
+  }
+
   function switchTab(tab) {
     TAB = tab;
     el('tab-cat').classList.toggle('active', tab === 'cat');
     el('tab-moon').classList.toggle('active', tab === 'moon');
+    el('tab-self').classList.toggle('active', tab === 'self');
     el('system-cat').classList.toggle('show', tab === 'cat');
     el('system-moon').classList.toggle('show', tab === 'moon');
+    el('system-self').classList.toggle('show', tab === 'self');
   }
 
   /* ---------- 记录存取 ---------- */
@@ -487,10 +577,11 @@
   }
 
   function saveRecord(rule) {
-    var isCat = rule === 'cat';
     var d = parseDuration(el(rule + '-start').value, el(rule + '-end').value);
     if (!d) return;
-    var r = isCat ? catCalc(d) : moonCalc(d);
+    var r = rule === 'cat' ? catCalc(d)
+          : rule === 'moon' ? moonCalc(d)
+          : selfCalc(d, el('self-rate').value);
     var date = el(rule + '-date').value || todayStr();
     var note = (el(rule + '-note').value || '').trim();
 
@@ -499,6 +590,7 @@
       id: newId(),
       date: date,
       rule: rule,
+      rate: rule === 'self' ? Number(el('self-rate').value) || 0 : (rule === 'cat' ? CAT_RATE : MOON_RATE),
       start: el(rule + '-start').value,
       end: el(rule + '-end').value,
       totalMin: d.totalMin,
@@ -543,7 +635,7 @@
     var curDate = '';
     sorted.forEach(function (r) {
       if (r.date !== curDate) { curDate = r.date; lines.push('\n' + r.date); }
-      lines.push('  ' + (r.rule === 'cat' ? '40元' : '35元') + ' ' + r.start + '–' + r.end +
+      lines.push('  ' + ruleLabel(r) + ' ' + r.start + '–' + r.end +
         '｜' + fmtDur(r.totalMin) +
         '｜工资 ' + formatYuan(r.gross) +
         '｜抽成 ' + formatYuan(r.ded) +
@@ -628,7 +720,9 @@
         var isCat = r.rule === 'cat';
         var badge = isCat
           ? '<span class="badge badge-cat">40元</span>'
-          : '<span class="badge badge-moon">35元</span>';
+          : r.rule === 'moon'
+            ? '<span class="badge badge-moon">35元</span>'
+            : '<span class="badge badge-self">' + (Number(r.rate) || 0) + '元</span>';
         return '<div class="entry">' +
           '<div class="entry-info">' +
             '<div class="entry-title">' + badge + r.start + ' – ' + r.end + '</div>' +
@@ -659,6 +753,7 @@
   /* ---------- 初始化 ---------- */
   el('cat-date').value = todayStr();
   el('moon-date').value = todayStr();
+  el('self-date').value = todayStr();
 
   ['cat-start', 'cat-end'].forEach(function (id) {
     el(id).addEventListener('change', calcCatUI);
@@ -668,9 +763,14 @@
     el(id).addEventListener('change', calcMoonUI);
     el(id).addEventListener('input', calcMoonUI);
   });
+  ['self-start', 'self-end', 'self-rate'].forEach(function (id) {
+    el(id).addEventListener('change', calcSelfUI);
+    el(id).addEventListener('input', calcSelfUI);
+  });
 
   calcCatUI();
   calcMoonUI();
+  calcSelfUI();
   renderRecords();
 </script>
 </body>
